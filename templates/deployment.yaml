@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: nginx-stream
+  name: nginx-stream
+spec:
+  selector:
+    matchLabels:
+      app: nginx-stream
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: nginx-stream
+    spec:
+      containers:
+      - image: harbor.wbl.com/common/nginx-stream:1.0.1
+        imagePullPolicy: IfNotPresent
+        name: nginx-stream
+        resources: {}
+        volumeMounts:		  
+        - name: nginx-conf
+          readOnly: true
+          mountPath: /etc/nginx
+      restartPolicy: Always
+      volumes:
+      - name: nginx-conf
+        configMap:
+          name: nginx-conf
+          items:
+            - key: nginx-conf
+              path: nginx.conf
+status: {}
